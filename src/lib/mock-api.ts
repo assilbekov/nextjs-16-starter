@@ -14,6 +14,8 @@ export interface AboutData {
     name: string;
     role: string;
     bio: string;
+    initials: string;
+    image?: string;
   }[];
 }
 
@@ -37,16 +39,21 @@ export async function fetchAboutData(): Promise<AboutData> {
         name: "Alex Johnson",
         role: "Lead Developer",
         bio: "10+ years of experience in web development and architecture.",
+        initials: "AJ",
+        image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
       },
       {
         name: "Sarah Chen",
         role: "UX Designer",
         bio: "Passionate about creating intuitive and beautiful user experiences.",
+        initials: "SC",
+        image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
       },
       {
         name: "Michael Torres",
         role: "Backend Engineer",
         bio: "Expert in scalable systems and database optimization.",
+        initials: "MT",
       },
     ],
   };

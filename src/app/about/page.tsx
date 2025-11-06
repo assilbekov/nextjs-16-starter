@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 // Skeleton components
 function AboutSkeleton() {
@@ -41,8 +42,13 @@ function AboutSkeleton() {
           {Array.from({ length: 3 }).map((_, i) => (
             <Card key={i}>
               <CardHeader>
-                <Skeleton className="h-6 w-3/4" />
-                <Skeleton className="h-4 w-1/2" />
+                <div className="flex items-center gap-4 mb-3">
+                  <Skeleton className="size-12 rounded-full" />
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="h-5 w-3/4" />
+                    <Skeleton className="h-4 w-1/2" />
+                  </div>
+                </div>
               </CardHeader>
               <CardContent>
                 <Skeleton className="h-4 w-full mb-2" />
@@ -102,8 +108,20 @@ async function AboutContent() {
               }}
             >
               <CardHeader>
-                <CardTitle>{member.name}</CardTitle>
-                <CardDescription>{member.role}</CardDescription>
+                <div className="flex items-center gap-4 mb-2">
+                  <Avatar className="size-12 text-base">
+                    {member.image && (
+                      <AvatarImage src={member.image} alt={member.name} />
+                    )}
+                    <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                      {member.initials}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1">
+                    <CardTitle className="text-lg">{member.name}</CardTitle>
+                    <CardDescription>{member.role}</CardDescription>
+                  </div>
+                </div>
               </CardHeader>
               <CardContent>
                 <p className="text-sm leading-relaxed">{member.bio}</p>
