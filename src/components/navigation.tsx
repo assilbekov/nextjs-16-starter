@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Info, ShoppingBag, BookOpen } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 const navItems = [
   { name: "Home", href: "/", icon: Home },
@@ -13,6 +14,23 @@ const navItems = [
 
 export default function Navigation() {
   const pathname = usePathname();
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
+  const navRef = useRef<HTMLUListElement>(null);
+  const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
+
+  useEffect(() => {
+    const activeIndex = navItems.findIndex((item) => item.href === pathname);
+    if (activeIndex !== -1 && itemRefs.current[activeIndex] && navRef.current) {
+      const activeItem = itemRefs.current[activeIndex];
+      const navRect = navRef.current.getBoundingClientRect();
+      const itemRect = activeItem.getBoundingClientRect();
+
+      setIndicatorStyle({
+        left: itemRect.left - navRect.left,
+        width: itemRect.width,
+      });
+    }
+  }, [pathname]);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-md">
@@ -22,17 +40,38 @@ export default function Navigation() {
             <Link href="/" className="text-xl font-semibold">
               App
             </Link>
-            <ul className="hidden md:flex items-center gap-1">
-              {navItems.map((item) => {
+            <ul
+              ref={navRef}
+              className="hidden md:flex items-center gap-1 relative"
+            >
+              {/* Sliding background indicator */}
+              <span
+                className="absolute top-0 h-full rounded-lg bg-accent transition-all duration-300 ease-out"
+                style={{
+                  left: `${indicatorStyle.left}px`,
+                  width: `${indicatorStyle.width}px`,
+                  clipPath:
+                    indicatorStyle.width > 0
+                      ? "inset(0 0 0 0 round 0.5rem)"
+                      : "inset(0 100% 0 0 round 0.5rem)",
+                }}
+              />
+
+              {navItems.map((item, index) => {
                 const isActive = pathname === item.href;
                 const Icon = item.icon;
                 return (
-                  <li key={item.href}>
+                  <li
+                    key={item.href}
+                    ref={(el) => {
+                      itemRefs.current[index] = el;
+                    }}
+                  >
                     <Link
                       href={item.href}
                       className={`
                         relative flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium
-                        transition-all duration-200 ease-out
+                        transition-colors duration-200 ease-out
                         ${
                           isActive
                             ? "text-foreground"
@@ -40,11 +79,8 @@ export default function Navigation() {
                         }
                       `}
                     >
-                      {isActive && (
-                        <span className="absolute inset-0 rounded-lg bg-accent animate-in fade-in zoom-in-95 duration-200" />
-                      )}
-                      <Icon className="relative h-4 w-4" />
-                      <span className="relative">{item.name}</span>
+                      <Icon className="relative h-4 w-4 z-10" />
+                      <span className="relative z-10">{item.name}</span>
                     </Link>
                   </li>
                 );
