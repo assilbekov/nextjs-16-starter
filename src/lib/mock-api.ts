@@ -5,58 +5,38 @@ export async function delay(ms: number = 1500): Promise<void> {
 }
 
 // About page data
-export interface AboutData {
-  title: string;
-  description: string;
-  mission: string;
-  values: string[];
-  team: {
-    name: string;
-    role: string;
-    bio: string;
-    initials: string;
-    image?: string;
-  }[];
-}
+export type AboutData = {
+  name: string;
+  role: string;
+  bio: string;
+  initials: string;
+  image?: string;
+}[];
 
 export async function fetchAboutData(): Promise<AboutData> {
   await delay(1800);
-  return {
-    title: "About Us",
-    description:
-      "We're a team of passionate developers building amazing web experiences with modern technologies.",
-    mission:
-      "Our mission is to create innovative solutions that empower businesses and delight users.",
-    values: [
-      "Innovation",
-      "Quality",
-      "Collaboration",
-      "User-Centric Design",
-      "Continuous Learning",
-    ],
-    team: [
-      {
-        name: "Alex Johnson",
-        role: "Lead Developer",
-        bio: "10+ years of experience in web development and architecture.",
-        initials: "AJ",
-        image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
-      },
-      {
-        name: "Sarah Chen",
-        role: "UX Designer",
-        bio: "Passionate about creating intuitive and beautiful user experiences.",
-        initials: "SC",
-        image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
-      },
-      {
-        name: "Michael Torres",
-        role: "Backend Engineer",
-        bio: "Expert in scalable systems and database optimization.",
-        initials: "MT",
-      },
-    ],
-  };
+  return [
+    {
+      name: "Alex Johnson",
+      role: "Lead Developer",
+      bio: "10+ years of experience in web development and architecture.",
+      initials: "AJ",
+      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
+    },
+    {
+      name: "Sarah Chen",
+      role: "UX Designer",
+      bio: "Passionate about creating intuitive and beautiful user experiences.",
+      initials: "SC",
+      image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
+    },
+    {
+      name: "Michael Torres",
+      role: "Backend Engineer",
+      bio: "Expert in scalable systems and database optimization.",
+      initials: "MT",
+    },
+  ];
 }
 
 // Products page data
