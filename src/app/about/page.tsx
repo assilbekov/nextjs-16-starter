@@ -7,7 +7,7 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen pt-24 pb-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="space-y-12">
           <div className="space-y-4">
             <h1 className="text-4xl font-bold tracking-tight">About Us</h1>
             <p className="text-lg text-muted-foreground">
@@ -51,7 +51,7 @@ export default function AboutPage() {
 
           <div className="space-y-6">
             <h2 className="text-2xl font-semibold">Our Team</h2>
-            <div className="grid gap-6 md:grid-cols-3">
+            <div className="grid gap-6 md:grid-cols-3 animate-in fade-in slide-in-from-bottom-4 duration-500">
               <Suspense fallback={<TeamSkeleton />}>
                 <OurTeam />
               </Suspense>

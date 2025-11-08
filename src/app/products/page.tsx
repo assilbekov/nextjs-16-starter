@@ -14,9 +14,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 
 // Skeleton components
-function ProductCardSkeleton() {
-  return (
-    <Card>
+function ProductsListSkeleton() {
+  return Array.from({ length: 6 }).map((_, i) => (
+    <Card key={i}>
       <CardHeader>
         <div className="flex items-start justify-between">
           <div className="space-y-2 flex-1">
@@ -37,88 +37,70 @@ function ProductCardSkeleton() {
         </div>
       </CardFooter>
     </Card>
-  );
+  ));
 }
 
-function ProductsSkeleton() {
-  return (
-    <div className="space-y-8">
-      <div className="space-y-4">
-        <Skeleton className="h-10 w-48" />
-        <Skeleton className="h-6 w-96" />
-      </div>
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <ProductCardSkeleton key={i} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-async function ProductsContent() {
+async function ProductsList() {
   const products = await fetchProducts();
 
-  return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="space-y-4">
-        <h1 className="text-4xl font-bold tracking-tight">Products</h1>
-        <p className="text-lg text-muted-foreground">
-          Discover our curated collection of high-quality products
+  return products.map((product, index) => (
+    <Card
+      key={product.id}
+      className="group transition-all hover:shadow-lg"
+      style={{
+        animationDelay: `${index * 75}ms`,
+      }}
+    >
+      <CardHeader>
+        <div className="flex items-start justify-between">
+          <div className="flex-1">
+            <CardTitle className="group-hover:text-primary transition-colors">
+              {product.name}
+            </CardTitle>
+            <CardDescription>{product.category}</CardDescription>
+          </div>
+          <div className="rounded-lg bg-muted p-2 transition-transform group-hover:scale-110">
+            <Package className="h-5 w-5" />
+          </div>
+        </div>
+      </CardHeader>
+
+      <CardContent>
+        <p className="text-sm leading-relaxed text-muted-foreground">
+          {product.description}
         </p>
-      </div>
+      </CardContent>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {products.map((product, index) => (
-          <Card
-            key={product.id}
-            className="group transition-all hover:shadow-lg"
-            style={{
-              animationDelay: `${index * 75}ms`,
-            }}
-          >
-            <CardHeader>
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <CardTitle className="group-hover:text-primary transition-colors">
-                    {product.name}
-                  </CardTitle>
-                  <CardDescription>{product.category}</CardDescription>
-                </div>
-                <div className="rounded-lg bg-muted p-2 transition-transform group-hover:scale-110">
-                  <Package className="h-5 w-5" />
-                </div>
-              </div>
-            </CardHeader>
+      <Separator />
 
-            <CardContent>
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                {product.description}
-              </p>
-            </CardContent>
-
-            <Separator />
-
-            <CardFooter className="flex items-center justify-between">
-              <p className="text-2xl font-bold">${product.price.toFixed(2)}</p>
-              <Badge variant={product.inStock ? "success" : "outline"}>
-                {product.inStock ? "In Stock" : "Out of Stock"}
-              </Badge>
-            </CardFooter>
-          </Card>
-        ))}
-      </div>
-    </div>
-  );
+      <CardFooter className="flex items-center justify-between">
+        <p className="text-2xl font-bold">${product.price.toFixed(2)}</p>
+        <Badge variant={product.inStock ? "success" : "outline"}>
+          {product.inStock ? "In Stock" : "Out of Stock"}
+        </Badge>
+      </CardFooter>
+    </Card>
+  ));
 }
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
   return (
     <div className="min-h-screen pt-24 pb-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <Suspense fallback={<ProductsSkeleton />}>
-          <ProductsContent />
-        </Suspense>
+        <div className="space-y-8">
+          <div className="space-y-4">
+            <h1 className="text-4xl font-bold tracking-tight">Products</h1>
+            <p className="text-lg text-muted-foreground">
+              Discover our curated collection of high-quality products
+            </p>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <Suspense fallback={<ProductsListSkeleton />}>
+              <ProductsList />
+            </Suspense>
+          </div>
+        </div>
       </div>
     </div>
   );
