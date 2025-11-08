@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Info, ShoppingBag, BookOpen } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { ThemeToggle } from "./theme-toggle";
 
 const navItems = [
   { name: "Home", href: "/", icon: Home },
@@ -88,28 +89,36 @@ export default function Navigation() {
             </ul>
           </div>
 
-          {/* Mobile menu */}
-          <div className="flex md:hidden items-center gap-2">
-            {navItems.map((item) => {
-              const isActive = pathname === item.href;
-              const Icon = item.icon;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`
-                    relative p-2 rounded-lg transition-all duration-200
-                    ${
-                      isActive
-                        ? "text-foreground bg-accent"
-                        : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
-                    }
-                  `}
-                >
-                  <Icon className="h-5 w-5" />
-                </Link>
-              );
-            })}
+          <div className="flex items-center gap-2">
+            {/* Desktop theme toggle */}
+            <div className="hidden md:block">
+              <ThemeToggle />
+            </div>
+
+            {/* Mobile menu */}
+            <div className="flex md:hidden items-center gap-2">
+              {navItems.map((item) => {
+                const isActive = pathname === item.href;
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`
+                      relative p-2 rounded-lg transition-all duration-200
+                      ${
+                        isActive
+                          ? "text-foreground bg-accent"
+                          : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
+                      }
+                    `}
+                  >
+                    <Icon className="h-5 w-5" />
+                  </Link>
+                );
+              })}
+              <ThemeToggle />
+            </div>
           </div>
         </div>
       </div>
